@@ -33,6 +33,37 @@
 
 char client_hostname[64];
 
+
+void change_name(char *string)
+{
+    char search[]  = "MiniDeltaLCD";
+    char replace[] = "OctoPrint   ";
+    char *tempString, *searchStart;
+    int len = 0;
+
+    searchStart = strstr(string, search);
+    if (searchStart == NULL)
+    {
+        return;
+    }
+
+    tempString = (char *)malloc(strlen(string) * sizeof(char));
+    if (tempString == NULL)
+    {
+        return;
+    }
+
+    strcpy(tempString, string);
+    len = searchStart - string;
+    string[len] = '\0';
+    strcat(string, replace);
+    len += strlen(search);
+    strcat(string, (char *)tempString + len);
+    free(tempString);
+}
+
+
+
 void
 cleanup(int sig)
 {
@@ -223,7 +254,7 @@ service_client(int cfd, int sfd)
 	if (x > 0) {
 	    if (FD_ISSET(cfd, &R)) {
 		n = read(cfd, cbuf+cbo, BUF_SIZE-cbo);
-		syslog(LOG_INFO, "read %d bytes from CLIENT (%d)", n, cfd);
+//		syslog(LOG_INFO, "read %d bytes from CLIENT (%d)", n, cfd);
 		if (n > 0) {
 		    cbo += n;
 		} else {
@@ -235,7 +266,8 @@ service_client(int cfd, int sfd)
 	    }
 	    if (FD_ISSET(sfd, &R)) {
 		n = read(sfd, sbuf+sbo, BUF_SIZE-sbo);
-		syslog(LOG_INFO, "read %d bytes from SERVER (%d)", n, sfd);
+//		syslog(LOG_INFO, "read %d bytes from SERVER (%d)", n, sfd);
+		change_name(sbuf);
 		if (n > 0) {
 		    sbo += n;
 		} else {
