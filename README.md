@@ -1,10 +1,6 @@
-This program listens for TCP connections on a given local address
-and port.  When a connection is accepted, it forks and then creates
-a new connection to a given remote address and port.  As long as
-both connections remain established, the program copies packets
-between the two sides.  Not unlike SSH tunnels, but without the
-SSH.
+This program intercepts communication between SuperSlicer and the 3D-Printer "MonoPrint Mini Delta V2" 
+and changes its identification to be able to upload files from SuperSlicer.
 
 Usage
 
-   simple-tcp-proxy localip localport remoteip remoteport &
+   simple-tcp-proxy localip localport printerip 80 &
